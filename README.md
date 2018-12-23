@@ -18,3 +18,24 @@ Below are the commands that is need for populating the empty postgresql table, t
 * `python manage.py migrate`
 * `python manage.py populate_db [file-location]`
 * `python manage.py runserver`
+
+
+There are two endpoints for timeseries and histogram:
+1. `localhost:8000/timeseries`:
+This endpoint only accepts *GET* request and params are:
+```
+{
+	"postcode": required,
+	"from_date": optional (if not given, today counts),
+	"to_date": optional (if not given, today counts)
+}
+```
+
+2. `localhost:8000/histogram`:
+This endpoint only accepts *GET* request and params are:
+```
+{
+	"postcode": required,
+	"date": optional (if not given, today counts),
+}
+```

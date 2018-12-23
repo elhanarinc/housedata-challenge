@@ -1,8 +1,10 @@
+from soldhouseprices.models import HouseData
+from calendar import monthrange
 import datetime
 import math
-from calendar import monthrange
-from soldhouseprices.models import HouseData
+import logging
 
+logger = logging.getLogger(__name__)
 
 months = {
     'January':      1,
@@ -23,10 +25,21 @@ BIN_NUMBER = 8
 
 
 def histogram_helper(request):
-    req_postcode = request['postcode']
-    selected_date = request['date']
+    logger.info('%s comes to "/histogram" endpoint', str(request))
 
-    if selected_date:
+    if 'postcode' not in request or request['postcode'] == '':
+        logger.error('No postcode has found on request!')
+        return {'result': 'No postcode has found on request!'}
+
+    req_postcode = request['postcode']
+
+    if 'date' not in request or request['date'] == '':
+        logger.info('No date has found on request, taking today as date!')
+        now = datetime.datetime.now()
+        selected_date_start = datetime.date(now.year, now.month, 1)
+        selected_date_end = datetime.date(now.year, now.month, now.day)
+    else:
+        selected_date = request['date']
         selected_date = str(selected_date).split(' ')
 
         selected_date_month = int(months[selected_date[0]])
@@ -36,14 +49,14 @@ def histogram_helper(request):
 
         selected_date_start = datetime.date(selected_date_year, selected_date_month, 1)
         selected_date_end = datetime.date(selected_date_year, selected_date_month, month_last_date)
-    else:
-        now = datetime.datetime.now()
-        selected_date_start = datetime.date(now.year, now.month, 1)
-        selected_date_end = datetime.date(now.year, now.month, now.day)
+
+    logger.info('Start Date: %s - End Date: %s', str(selected_date_start), str(selected_date_end))
 
     house_data = HouseData.objects.values('price')\
         .filter(postcode=req_postcode, date_of_transfer__range=(selected_date_start, selected_date_end))\
         .order_by('price')
+
+    logger.info('%s records has been found.', str(len(house_data)))
 
     histogram_data = []
     if len(house_data) != 0:
@@ -66,9 +79,6 @@ def histogram_helper(request):
             for bucket in histogram_data:
                 if is_inside(house['price'], bucket):
                     bucket['count'] += 1
-
-        for bucket in histogram_data:
-            print(bucket)
 
     return histogram_data
 
