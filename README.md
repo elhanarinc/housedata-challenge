@@ -13,6 +13,12 @@ Then you need to add header row for this raw data by using command below on term
 
 In order to use django with postgresql, you need to follow this [link](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04).
 
+First we need to create a `virtualenv` by using below commands:
+* `virtualenv venv -p [python3 location like /usr/local/bin/python3]`
+* `source venv/bin/activate`
+* Go to the project directory like `cd /home/challenge-directory/`
+* `pip install -r requirements.txt`
+
 Below are the commands that is need for populating the empty postgresql table, then running the API:
 * `python manage.py makemigrations`
 * `python manage.py migrate`
@@ -44,3 +50,8 @@ Deployed API endpoints:
 1. `http://plentific-challenge.westeurope.cloudapp.azure.com/timeseries`
 2. `http://plentific-challenge.westeurope.cloudapp.azure.com/histogram`
 
+Tools used for deploying and serving endpoints:
+1. [Microsoft Azure VM](https://azure.microsoft.com/tr-tr/services/virtual-machines/)
+2. [gunicorn](https://gunicorn.org/)
+3. [nginx](https://www.nginx.com/)
+4. [supervisor](http://supervisord.org/introduction.html)
