@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from soldhouseprices.lib import timeseries, histogram
-
 import json
 
 
@@ -24,7 +23,7 @@ def get_time_series(request):
 def get_histogram(request):
     if request.method == 'GET':
         body = json.loads(request.body)
-        print(body)
-        return JsonResponse({'result': 'Histogram'})
+        response_data = histogram.histogram_helper(body)
+        return JsonResponse(response_data, safe=False)
     else:
         return JsonResponse({'result': 'Only GET requests are allowed for Histogram Data!'})
