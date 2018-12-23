@@ -7,18 +7,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 months = {
-    'January':      1,
-    'February':     2,
-    'March':        3,
-    'April':        4,
-    'May':          5,
-    'June':         6,
-    'July':         7,
-    'August':       8,
-    'September':    9,
-    'October':      10,
-    'November':     11,
-    'December':     12
+    'january':      1,
+    'february':     2,
+    'march':        3,
+    'april':        4,
+    'may':          5,
+    'june':         6,
+    'july':         7,
+    'august':       8,
+    'september':    9,
+    'october':      10,
+    'november':     11,
+    'december':     12
 }
 
 response_data = [
@@ -61,8 +61,22 @@ def timeseries_helper(request):
     else:
         from_date = request['from_date']
         from_date = str(from_date).split(' ')
-        from_date_month = int(months[from_date[0]])
-        from_date_year = int(from_date[1])
+
+        if str(from_date[0]).lower() not in months:
+            logger.error('Month of the from_date object has not been found!')
+            return {'result': 'Month of the from_date object has not been found, use proper format!'}
+
+        from_date_month = int(months[str(from_date[0]).lower()])
+
+        try:
+            from_date_year = int(from_date[1])
+            if int(from_date[1]) <= 0:
+                logger.error('Year of the from_date object is less than or equal to 0!')
+                return {'result': 'Year of the from_date object is less than or equal to 0!'}
+        except:
+            logger.error('Cannot parse Year of from_date object into a number!')
+            return {'result': 'Cannot parse Year of from_date object into a number!'}
+
         from_date = datetime.date(from_date_year, from_date_month, 1)
 
     if 'to_date' not in request or request['to_date'] == '':
@@ -72,9 +86,29 @@ def timeseries_helper(request):
     else:
         to_date = request['to_date']
         to_date = str(to_date).split(' ')
-        to_date_month = int(months[to_date[0]])
-        to_date_year = int(to_date[1])
+
+        if str(to_date[0]).lower() not in months:
+            logger.error('Month of the to_date object has not been found!')
+            return {'result': 'Month of the to_date object has not been found, use proper format!'}
+
+        to_date_month = int(months[str(to_date[0]).lower()])
+
+        try:
+            to_date_year = int(to_date[1])
+            if int(to_date[1]) <= 0:
+                logger.error('Year of the to_date object is less than or equal to 0!')
+                return {'result': 'Year of the to_date object is less than or equal to 0!'}
+        except:
+            logger.error('Cannot parse Year of from_date object into a number!')
+            return {'result': 'Cannot parse Year of from_date object into a number!'}
+
         to_date = datetime.date(to_date_year, to_date_month, 1)
+
+    if from_date > to_date:
+        logger.warning('from_date object is closer today than to_date object!')
+        tmp_date = from_date
+        from_date = to_date
+        to_date = tmp_date
 
     house_data = HouseData.objects.values('property_type', 'date_of_transfer')\
         .annotate(average_price=Avg('price'))\

@@ -26,8 +26,8 @@ This endpoint only accepts *GET* request and params are:
 ```
 {
 	"postcode": required,
-	"from_date": optional (if not given, today counts),
-	"to_date": optional (if not given, today counts)
+	"from_date": optional (format: [Month Year]),
+	"to_date": optional (example: September 2018)
 }
 ```
 
@@ -36,6 +36,11 @@ This endpoint only accepts *GET* request and params are:
 ```
 {
 	"postcode": required,
-	"date": optional (if not given, today counts),
+	"date": optional (format: [Month Year], example: September 2018)
 }
 ```
+
+Deployed API endpoints:
+1. `http://plentific-challenge.westeurope.cloudapp.azure.com/timeseries`
+2. `http://plentific-challenge.westeurope.cloudapp.azure.com/histogram`
+

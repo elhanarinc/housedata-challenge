@@ -7,18 +7,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 months = {
-    'January':      1,
-    'February':     2,
-    'March':        3,
-    'April':        4,
-    'May':          5,
-    'June':         6,
-    'July':         7,
-    'August':       8,
-    'September':    9,
-    'October':      10,
-    'November':     11,
-    'December':     12
+    'january':      1,
+    'february':     2,
+    'march':        3,
+    'april':        4,
+    'may':          5,
+    'june':         6,
+    'july':         7,
+    'august':       8,
+    'september':    9,
+    'october':      10,
+    'november':     11,
+    'december':     12
 }
 
 BIN_NUMBER = 8
@@ -42,8 +42,17 @@ def histogram_helper(request):
         selected_date = request['date']
         selected_date = str(selected_date).split(' ')
 
-        selected_date_month = int(months[selected_date[0]])
-        selected_date_year = int(selected_date[1])
+        if str(selected_date[0]).lower() not in months:
+            logger.error('Month of the date object has not been found!')
+            return {'result': 'Month of the date object has not been found!'}
+
+        selected_date_month = int(months[str(selected_date[0]).lower()])
+
+        try:
+            selected_date_year = int(selected_date[1])
+        except:
+            logger.error('Cannot parse Year of date object into a number!')
+            return {'result': 'Cannot parse Year of date object into a number!'}
 
         month_last_date = monthrange(selected_date_year, selected_date_month)[1]
 
@@ -67,7 +76,7 @@ def histogram_helper(request):
 
         while min_price_data < max_price_data:
             bucket = {
-                'label': str(min_price_data) + '€ - ' + str(min_price_data + bin_range) + '€',
+                'label': str(min_price_data) + ' € - ' + str(min_price_data + bin_range) + ' €',
                 'min': min_price_data,
                 'max': min_price_data + bin_range,
                 'count': 0
