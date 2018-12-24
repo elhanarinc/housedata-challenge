@@ -1,29 +1,23 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from soldhouseprices.lib import timeseries, histogram
 import json
 
 
-@csrf_exempt
+@require_http_methods(['GET'])
 def index(request):
     return JsonResponse({'result': 'OK'})
 
 
-@csrf_exempt
+@require_http_methods(['GET'])
 def get_time_series(request):
-    if request.method == 'GET':
-        body = json.loads(request.body)
-        response_data = timeseries.timeseries_helper(body)
-        return JsonResponse(response_data, safe=False)
-    else:
-        return JsonResponse({'result': 'Only GET requests are allowed for Time Series Data!'})
+    body = json.loads(request.body)
+    response_data = timeseries.timeseries_helper(body)
+    return JsonResponse(response_data, safe=False)
 
 
-@csrf_exempt
+@require_http_methods(['GET'])
 def get_histogram(request):
-    if request.method == 'GET':
-        body = json.loads(request.body)
-        response_data = histogram.histogram_helper(body)
-        return JsonResponse(response_data, safe=False)
-    else:
-        return JsonResponse({'result': 'Only GET requests are allowed for Histogram Data!'})
+    body = json.loads(request.body)
+    response_data = histogram.histogram_helper(body)
+    return JsonResponse(response_data, safe=False)
