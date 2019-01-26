@@ -1,5 +1,5 @@
-# Plentific Challenge
-Pletific coding challenge written with Django Framework.
+# Django Challenge
+Coding challenge written with Django Framework.
 
 This project assumes you had already installed these tools:
 1. [python 3](https://realpython.com/installing-python/)
@@ -45,10 +45,6 @@ This endpoint only accepts *GET* request and params are:
 	"date": optional (format: [Month Year], example: September 2018)
 }
 ```
-
-Deployed API endpoints:
-1. `http://plentific-challenge.westeurope.cloudapp.azure.com/timeseries`
-2. `http://plentific-challenge.westeurope.cloudapp.azure.com/histogram`
 
 Tools used for deploying and serving endpoints:
 1. [Microsoft Azure VM](https://azure.microsoft.com/tr-tr/services/virtual-machines/)
