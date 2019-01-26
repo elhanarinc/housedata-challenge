@@ -27,7 +27,7 @@ Below are the commands that is need for populating the empty postgresql table, t
 
 
 There are two endpoints for timeseries and histogram:
-1. `localhost:8000/timeseries`:
+1. `/timeseries`:
 This endpoint only accepts *GET* request and params are:
 ```
 {
@@ -37,7 +37,7 @@ This endpoint only accepts *GET* request and params are:
 }
 ```
 
-2. `localhost:8000/histogram`:
+2. `/histogram`:
 This endpoint only accepts *GET* request and params are:
 ```
 {
